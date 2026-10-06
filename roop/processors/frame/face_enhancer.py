@@ -1,6 +1,16 @@
 from typing import Any, List, Callable
+import sys
 import cv2
 import threading
+
+# basicsr (a gfpgan dependency) imports torchvision.transforms.functional_tensor,
+# which torchvision 0.17+ removed; its functions now live in transforms.functional.
+try:
+    import torchvision.transforms.functional_tensor  # noqa: F401
+except ImportError:
+    import torchvision.transforms.functional
+    sys.modules['torchvision.transforms.functional_tensor'] = torchvision.transforms.functional
+
 from gfpgan.utils import GFPGANer
 
 import roop.globals
