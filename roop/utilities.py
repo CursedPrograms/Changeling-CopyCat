@@ -147,3 +147,9 @@ def conditional_download(download_directory_path: str, urls: List[str]) -> None:
 
 def resolve_relative_path(path: str) -> str:
     return os.path.abspath(os.path.join(os.path.dirname(__file__), path))
+
+
+def models_directory() -> str:
+    """Where the models live: ROOP_MODELS_DIR if set (AI Visual Workshop keeps them in its own
+    models/roop), else this repo's models/."""
+    return os.environ.get('ROOP_MODELS_DIR') or resolve_relative_path('../models')

@@ -1,3 +1,4 @@
+import os
 from typing import Any, List, Callable
 import cv2
 import insightface
@@ -9,7 +10,7 @@ from roop.core import update_status
 from roop.face_analyser import get_one_face, get_many_faces, find_similar_face
 from roop.face_reference import get_face_reference, set_face_reference, clear_face_reference
 from roop.typing import Face, Frame
-from roop.utilities import conditional_download, resolve_relative_path, is_image, is_video
+from roop.utilities import conditional_download, models_directory, is_image, is_video
 
 FACE_SWAPPER = None
 THREAD_LOCK = threading.Lock()
@@ -21,7 +22,7 @@ def get_face_swapper() -> Any:
 
     with THREAD_LOCK:
         if FACE_SWAPPER is None:
-            model_path = resolve_relative_path('../models/inswapper_128.onnx')
+            model_path = os.path.join(models_directory(), 'inswapper_128.onnx')
             FACE_SWAPPER = insightface.model_zoo.get_model(model_path, providers=roop.globals.execution_providers)
     return FACE_SWAPPER
 
@@ -33,7 +34,7 @@ def clear_face_swapper() -> None:
 
 
 def pre_check() -> bool:
-    download_directory_path = resolve_relative_path('../models')
+    download_directory_path = models_directory()
     conditional_download(download_directory_path, ['https://huggingface.co/CountFloyd/deepfake/resolve/main/inswapper_128.onnx'])
     return True
 

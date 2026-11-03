@@ -135,7 +135,7 @@ def start() -> None:
     # process image to image
     if has_image_extension(roop.globals.target_path):
         if predict_image(roop.globals.target_path):
-            destroy()
+            blocked()
         shutil.copy2(roop.globals.target_path, roop.globals.output_path)
         # process frame
         for frame_processor in get_frame_processors_modules(roop.globals.frame_processors):
@@ -150,7 +150,7 @@ def start() -> None:
         return
     # process image to videos
     if predict_video(roop.globals.target_path):
-        destroy()
+        blocked()
     update_status('Creating temporary resources...')
     create_temp(roop.globals.target_path)
     # extract frames
@@ -197,6 +197,13 @@ def start() -> None:
         update_status('Processing to video succeed!')
     else:
         update_status('Processing to video failed!')
+
+
+def blocked() -> None:
+    update_status('The target was flagged as NSFW, so it was not processed.')
+    if roop.globals.target_path:
+        clean_temp(roop.globals.target_path)
+    sys.exit(3)
 
 
 def destroy() -> None:

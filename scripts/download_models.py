@@ -3,7 +3,9 @@ import sys
 import urllib.request
 from pathlib import Path
 
-MODELS_DIR = Path(__file__).resolve().parent.parent / 'models'
+import os
+
+MODELS_DIR = Path(os.environ.get('ROOP_MODELS_DIR') or Path(__file__).resolve().parent.parent / 'models')
 
 MODELS = {
     'inswapper_128.onnx': 'https://huggingface.co/CountFloyd/deepfake/resolve/main/inswapper_128.onnx',
