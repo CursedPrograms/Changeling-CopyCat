@@ -1,39 +1,19 @@
 #!/usr/bin/env bash
+# run.sh - starts Roop-FaceSwap. Sets it up first if it needs it (setup.sh).
+#   ./run.sh                                       opens the app
+#   ./run.sh -s face.png -t clip.mp4 -o out.mp4    swaps without the app
+# Uses your NVIDIA GPU when there is one; add --execution-provider cpu to force the CPU.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-VENV_DIR=psdenv
-VENV_PY="$VENV_DIR/bin/python"
-case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) VENV_PY="$VENV_DIR/Scripts/python.exe" ;; esac
+bash ./setup.sh
 
-# 1) Create the virtual environment (TensorFlow and PyTorch need Python 3.9 - 3.12).
-if [ ! -x "$VENV_PY" ]; then
-    echo "Creating virtual environment..."
-    BASE_PY=""
-    for candidate in python3.11 python3.12 python3.10 python3.9 python3 python; do
-        if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c \
-            'import sys; sys.exit(0 if (3, 9) <= sys.version_info[:2] <= (3, 12) else 1)' 2>/dev/null; then
-            BASE_PY="$candidate"
-            break
-        fi
-    done
-    if [ -z "$BASE_PY" ]; then
-        echo "Python 3.9 - 3.12 is required." >&2
-        exit 1
-    fi
-    "$BASE_PY" -m venv "$VENV_DIR"
-fi
+VENV_PY=psdenv/bin/python
+case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) VENV_PY=psdenv/Scripts/python.exe ;; esac
 
-# 2) Install requirements when requirements.txt changed since the last install.
-if ! cmp -s requirements.txt "$VENV_DIR/.requirements"; then
-    echo "Installing requirements..."
-    "$VENV_PY" -m pip install --upgrade pip
-    "$VENV_PY" -m pip install -r requirements.txt
-    cp requirements.txt "$VENV_DIR/.requirements"
-fi
-
-# 3) Download any missing models.
-"$VENV_PY" scripts/download_models.py
-
-# 4) Run. With no arguments this opens the GUI.
-exec "$VENV_PY" run.py "$@"
+PROVIDER=()
+case " $* " in
+    *" --execution-provider"*) ;;
+    *) if command -v nvidia-smi >/dev/null 2>&1; then PROVIDER=(--execution-provider cuda); fi ;;
+esac
+exec "$VENV_PY" run.py ${PROVIDER[@]+"${PROVIDER[@]}"} "$@"
