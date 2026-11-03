@@ -7,6 +7,8 @@ if any(arg.startswith('--execution-provider') for arg in sys.argv):
     os.environ['OMP_NUM_THREADS'] = '1'
 # reduce tensorflow log level
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+# opennsfw2 (the NSFW check) is written for Keras 2; TensorFlow 2.16+ ships Keras 3 unless told otherwise
+os.environ.setdefault('TF_USE_LEGACY_KERAS', '1')
 import warnings
 from typing import List
 import platform

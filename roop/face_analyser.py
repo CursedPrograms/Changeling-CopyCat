@@ -1,5 +1,6 @@
 import threading
 from typing import Any, Optional, List
+import cv2
 import insightface
 import numpy
 
@@ -38,9 +39,32 @@ def get_one_face(frame: Frame, position: int = 0) -> Optional[Face]:
 
 def get_many_faces(frame: Frame) -> Optional[List[Face]]:
     try:
-        return get_face_analyser().get(frame)
+        faces = get_face_analyser().get(frame)
+        if not faces:
+            faces = _get_padded(frame)
+        return faces
     except ValueError:
         return None
+
+
+def _get_padded(frame: Frame) -> List[Face]:
+    """The detector misses a face that fills the whole picture (close-up portraits):
+    look again with a border round it, then move the face back into the frame's coordinates."""
+    height, width = frame.shape[:2]
+    pad = max(height, width) // 2
+    padded = cv2.copyMakeBorder(frame, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+    faces = get_face_analyser().get(padded)
+    for face in faces:
+        for key in ('bbox', 'kps', 'landmark_2d_106', 'landmark_3d_68'):
+            points = face.get(key)
+            if points is not None:
+                points = points.copy()
+                if key == 'bbox':
+                    points -= pad
+                else:
+                    points[..., :2] -= pad
+                face[key] = points
+    return faces
 
 
 def find_similar_face(frame: Frame, reference_face: Face) -> Optional[Face]:
