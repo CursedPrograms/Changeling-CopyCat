@@ -70,6 +70,10 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     root.title(f'{changeling.metadata.name} {changeling.metadata.version}')
     root.configure()
     root.protocol('WM_DELETE_WINDOW', lambda: destroy())
+    # the Changeling logo as the window's icon (after customtkinter puts its own in, ~200 ms)
+    logo = resolve_relative_path('../logo.ico')
+    if os.name == 'nt' and os.path.exists(logo):
+        root.after(300, lambda: root.iconbitmap(logo))
 
     source_label = ctk.CTkLabel(root, text=None, fg_color=ctk.ThemeManager.theme.get('DropArea').get('fg_color'))
     source_label.place(relx=0.1, rely=0.1, relwidth=0.3, relheight=0.25)
