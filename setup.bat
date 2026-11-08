@@ -1,5 +1,5 @@
 @echo off
-rem setup.bat - gets Roop-FaceSwap ready: the psdenv virtual environment (Python 3.9 - 3.12),
+rem setup.bat - gets Changeling ready: the psdenv virtual environment (Python 3.9 - 3.12),
 rem the packages in requirements.txt and the models. Safe to run again: it only redoes what's
 rem missing or changed. run.bat calls it for you, so you only need this on its own to set up
 rem without opening the app.
@@ -44,7 +44,7 @@ rem 3) Any missing models.
 rem 4) Which GPU, and a warning if its driver is too old.
 "%VENV_PY%" scripts/check_gpu.py
 
-echo Roop-FaceSwap is ready. Start it with run.bat
+echo Changeling is ready. Start it with run.bat
 exit /b 0
 
 :error

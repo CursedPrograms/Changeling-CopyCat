@@ -1,5 +1,5 @@
 [![Twitter: @NorowaretaGemu](https://img.shields.io/badge/X-@NorowaretaGemu-blue.svg?style=flat)](https://x.com/NorowaretaGemu)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 
 <br>
 <div align="center">
@@ -24,7 +24,20 @@
   </div>
 <br>
 
-# Roop-FaceSwap
+# Changeling
+
+**Website:** https://cursedprograms.github.io/Changeling/
+
+![A target photo, the face to put on it, and Changeling's result](samples/changeling_sample.jpg)
+
+Put a face from one photo onto another photo or a whole video. Pick the face, pick the target, press
+**Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
+faces, making the video), how far it is and how long it has left. GFPGAN can clean the faces up after.
+
+Changeling grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
+under the **GNU AGPL-3.0** (see `LICENSE`). Its NSFW check stays on: explicit targets are refused.
+
+Use it on faces you have the right to use: AI-generated people, yourself, or people who agreed to it.
 
 ## Getting started
 
@@ -60,7 +73,7 @@ run.bat -s face.png -t clip.mp4 -o out.mp4
 run.bat -s face.png -t clip.mp4 -o out.mp4 --frame-processor face_swapper face_enhancer --keep-fps
 ```
 
-The swap refuses explicit targets: Roop's NSFW check (`roop/predictor.py`) stays on.
+The swap refuses explicit targets: the NSFW check (`changeling/predictor.py`) stays on.
 
 <br>
 
@@ -99,14 +112,22 @@ python run.py [options]
 
 Using the `-s/--source`, `-t/--target` and `-o/--output` argument will run the program in headless mode.
 
+---
+
 <br>
 <div align="center">
-© Cursed Entertainment
+© Cursed Entertainment 2026
 </div>
 <br>
 <div align="center">
 <a href="https://cursed-entertainment.itch.io/" target="_blank">
-    <img src="https://github.com/CursedPrograms/cursedentertainment/raw/main/images/logos/logo-wide-grey.png"
+    <img src="https://raw.githubusercontent.com/CursedPrograms/cursedentertainment/main/images/logos/logo-wide-grey.png"
         alt="CursedEntertainment Logo" style="width:250px;">
 </a>
+</div>
+<br>
+<div align="center">
+  <a href="https://github.com/SynthWomb" target="_blank">
+    <img src="https://raw.githubusercontent.com/SynthWomb/synth.womb/main/logos/synthwomb07.png" alt="SynthWomb" style="width:200px;"/>
+  </a>
 </div>

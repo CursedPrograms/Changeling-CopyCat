@@ -4,7 +4,7 @@ import opennsfw2
 from PIL import Image
 from tf_keras import Model
 
-from roop.typing import Frame
+from changeling.typing import Frame
 
 PREDICTOR = None
 THREAD_LOCK = threading.Lock()

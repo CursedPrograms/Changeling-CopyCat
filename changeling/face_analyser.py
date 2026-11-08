@@ -4,8 +4,8 @@ import cv2
 import insightface
 import numpy
 
-import roop.globals
-from roop.typing import Frame, Face
+import changeling.globals
+from changeling.typing import Frame, Face
 
 FACE_ANALYSER = None
 THREAD_LOCK = threading.Lock()
@@ -16,7 +16,7 @@ def get_face_analyser() -> Any:
 
     with THREAD_LOCK:
         if FACE_ANALYSER is None:
-            FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=roop.globals.execution_providers)
+            FACE_ANALYSER = insightface.app.FaceAnalysis(name='buffalo_l', providers=changeling.globals.execution_providers)
             FACE_ANALYSER.prepare(ctx_id=0)
     return FACE_ANALYSER
 
@@ -73,6 +73,6 @@ def find_similar_face(frame: Frame, reference_face: Face) -> Optional[Face]:
         for face in many_faces:
             if hasattr(face, 'normed_embedding') and hasattr(reference_face, 'normed_embedding'):
                 distance = numpy.sum(numpy.square(face.normed_embedding - reference_face.normed_embedding))
-                if distance < roop.globals.similar_face_distance:
+                if distance < changeling.globals.similar_face_distance:
                     return face
     return None

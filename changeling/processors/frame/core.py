@@ -8,7 +8,8 @@ from types import ModuleType
 from typing import Any, List, Callable
 from tqdm import tqdm
 
-import roop
+import changeling
+from changeling import progress
 
 FRAME_PROCESSORS_MODULES: List[ModuleType] = []
 FRAME_PROCESSORS_INTERFACE = [
@@ -24,7 +25,7 @@ FRAME_PROCESSORS_INTERFACE = [
 
 def load_frame_processor_module(frame_processor: str) -> Any:
     try:
-        frame_processor_module = importlib.import_module(f'roop.processors.frame.{frame_processor}')
+        frame_processor_module = importlib.import_module(f'changeling.processors.frame.{frame_processor}')
         for method_name in FRAME_PROCESSORS_INTERFACE:
             if not hasattr(frame_processor_module, method_name):
                 raise NotImplementedError
@@ -46,10 +47,10 @@ def get_frame_processors_modules(frame_processors: List[str]) -> List[ModuleType
 
 
 def multi_process_frame(source_path: str, temp_frame_paths: List[str], process_frames: Callable[[str, List[str], Any], None], update: Callable[[], None]) -> None:
-    with ThreadPoolExecutor(max_workers=roop.globals.execution_threads) as executor:
+    with ThreadPoolExecutor(max_workers=changeling.globals.execution_threads) as executor:
         futures = []
         queue = create_queue(temp_frame_paths)
-        queue_per_future = max(len(temp_frame_paths) // roop.globals.execution_threads, 1)
+        queue_per_future = max(len(temp_frame_paths) // changeling.globals.execution_threads, 1)
         while not queue.empty():
             future = executor.submit(process_frames, source_path, pick_queue(queue, queue_per_future), update)
             futures.append(future)
@@ -79,13 +80,17 @@ def process_video(source_path: str, frame_paths: list[str], process_frames: Call
         multi_process_frame(source_path, frame_paths, process_frames, lambda: update_progress(progress))
 
 
+STEP = progress.step  # the window's completion bar: one frame done
+
+
 def update_progress(progress: Any = None) -> None:
     process = psutil.Process(os.getpid())
     memory_usage = process.memory_info().rss / 1024 / 1024 / 1024
     progress.set_postfix({
         'memory_usage': '{:.2f}'.format(memory_usage).zfill(5) + 'GB',
-        'execution_providers': roop.globals.execution_providers,
-        'execution_threads': roop.globals.execution_threads
+        'execution_providers': changeling.globals.execution_providers,
+        'execution_threads': changeling.globals.execution_threads
     })
     progress.refresh()
     progress.update(1)
+    STEP()

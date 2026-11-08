@@ -163,7 +163,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# Roop-FaceSwap
+# Changeling
 models/
 
 # weights GFPGAN (facexlib) downloads on the first run

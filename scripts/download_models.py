@@ -5,7 +5,7 @@ from pathlib import Path
 
 import os
 
-MODELS_DIR = Path(os.environ.get('ROOP_MODELS_DIR') or Path(__file__).resolve().parent.parent / 'models')
+MODELS_DIR = Path(os.environ.get('CHANGELING_MODELS_DIR') or os.environ.get('ROOP_MODELS_DIR') or Path(__file__).resolve().parent.parent / 'models')
 
 MODELS = {
     'inswapper_128.onnx': 'https://huggingface.co/CountFloyd/deepfake/resolve/main/inswapper_128.onnx',

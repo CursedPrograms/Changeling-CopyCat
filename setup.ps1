@@ -1,4 +1,4 @@
-# setup.ps1 - gets Roop-FaceSwap ready: the psdenv virtual environment (Python 3.9 - 3.12),
+# setup.ps1 - gets Changeling ready: the psdenv virtual environment (Python 3.9 - 3.12),
 # the packages in requirements.txt and the models. Safe to run again: it only redoes what's
 # missing or changed. run.ps1 calls it for you.
 #
@@ -50,4 +50,4 @@ Invoke-Checked $VenvPy scripts/download_models.py
 # 4) Which GPU, and a warning if its driver is too old.
 & $VenvPy scripts/check_gpu.py
 
-Write-Host 'Roop-FaceSwap is ready. Start it with run.ps1'
+Write-Host 'Changeling is ready. Start it with run.ps1'

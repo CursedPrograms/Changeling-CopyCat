@@ -1,4 +1,4 @@
-# run.ps1 - starts Roop-FaceSwap. Sets it up first if it needs it (setup.ps1).
+# run.ps1 - starts Changeling. Sets it up first if it needs it (setup.ps1).
 #   .\run.ps1                                       opens the app
 #   .\run.ps1 -s face.png -t clip.mp4 -o out.mp4    swaps without the app
 # Uses your NVIDIA GPU when there is one; add --execution-provider cpu to force the CPU.

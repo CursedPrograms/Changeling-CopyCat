@@ -1,5 +1,5 @@
 @echo off
-rem run.bat - starts Roop-FaceSwap. Sets it up first if it needs it (setup.bat).
+rem run.bat - starts Changeling. Sets it up first if it needs it (setup.bat).
 rem   run.bat                                       opens the app
 rem   run.bat -s face.png -t clip.mp4 -o out.mp4    swaps without the app
 rem Uses your NVIDIA GPU when there is one; add --execution-provider cpu to force the CPU.

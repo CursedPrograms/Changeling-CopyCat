@@ -1,4 +1,4 @@
-"""Says which GPU Roop will use, and warns when the NVIDIA driver is too old for CUDA 12.
+"""Says which GPU Changeling will use, and warns when the NVIDIA driver is too old for CUDA 12.
 
 Stdlib only, never fails: setup runs it every time, and a problem here is a warning, not a stop.
 """
@@ -12,7 +12,7 @@ MIN_DRIVER = 531 if platform.system() == 'Windows' else 530
 
 def main():
     if not shutil.which('nvidia-smi'):
-        print('GPU: no NVIDIA card found - Roop runs on the CPU (slow, but it works).')
+        print('GPU: no NVIDIA card found - Changeling runs on the CPU (slow, but it works).')
         return
     try:
         out = subprocess.run(['nvidia-smi', '--query-gpu=name,memory.total,driver_version',
@@ -21,7 +21,7 @@ def main():
         name, memory, driver = [part.strip() for part in out.split(',')]
         major = int(driver.split('.')[0])
     except Exception:
-        print('GPU: nvidia-smi is there but didn\'t answer - Roop will try CUDA anyway.')
+        print('GPU: nvidia-smi is there but didn\'t answer - Changeling will try CUDA anyway.')
         return
     print(f'GPU: {name}, {int(memory) // 1024} GB, driver {driver}')
     if major < MIN_DRIVER:

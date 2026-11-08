@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup.sh - gets Roop-FaceSwap ready: the psdenv virtual environment (Python 3.9 - 3.12),
+# setup.sh - gets Changeling ready: the psdenv virtual environment (Python 3.9 - 3.12),
 # the packages in requirements.txt and the models. Safe to run again: it only redoes what's
 # missing or changed. run.sh calls it for you.
 set -euo pipefail
@@ -42,4 +42,4 @@ fi
 # 4) Which GPU, and a warning if its driver is too old.
 "$VENV_PY" scripts/check_gpu.py || true
 
-echo "Roop-FaceSwap is ready. Start it with ./run.sh"
+echo "Changeling is ready. Start it with ./run.sh"
