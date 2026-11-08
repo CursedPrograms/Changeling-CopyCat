@@ -30,7 +30,7 @@
 
 ![A target photo, the face to put on it, and Changeling's result](samples/changeling_sample.jpg)
 
-Put a face from one photo onto another photo or a whole video. *Part of the Changeling family: [Changeling Realtime](https://github.com/CursedPrograms/Changeling-Realtime) does it live on the webcam.*
+Put a face from one photo onto another photo or a whole video. *Part of the Changeling family: [Changeling CopyCat Realtime](https://github.com/CursedPrograms/Changeling-CopyCat-Realtime) does it live on the webcam.*
 
 Pick the face, pick the target, press
 **Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
