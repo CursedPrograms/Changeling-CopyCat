@@ -24,17 +24,19 @@
   </div>
 <br>
 
-# Changeling
+# Changeling CopyCat
 
-**Website:** https://cursedprograms.github.io/Changeling/
+**Website:** https://cursedprograms.github.io/Changeling-CopyCat/
 
 ![A target photo, the face to put on it, and Changeling's result](samples/changeling_sample.jpg)
 
-Put a face from one photo onto another photo or a whole video. Pick the face, pick the target, press
+Put a face from one photo onto another photo or a whole video. *Part of the Changeling family: [Changeling Realtime](https://github.com/CursedPrograms/Changeling-Realtime) does it live on the webcam.*
+
+Pick the face, pick the target, press
 **Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
 faces, making the video), how far it is and how long it has left. GFPGAN can clean the faces up after.
 
-Changeling grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
+Changeling CopyCat grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
 under the **GNU AGPL-3.0** (see `LICENSE`). Its NSFW check stays on: explicit targets are refused.
 
 Use it on faces you have the right to use: AI-generated people, yourself, or people who agreed to it.
