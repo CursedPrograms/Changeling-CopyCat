@@ -92,7 +92,7 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     nsfw_switch = ctk.CTkSwitch(root, text='NSFW', variable=nsfw_value, cursor='hand2', command=lambda: setattr(modules.globals, 'nsfw', nsfw_value.get()))
     nsfw_switch.place(relx=0.6, rely=0.7)
 
-    start_button = ctk.CTkButton(root, text='Start', cursor='hand2', command=lambda: select_output_path(start))
+    start_button = ctk.CTkButton(root, text='Start', cursor='hand2', fg_color='#007ab7', hover_color='#005184', command=lambda: select_output_path(start))
     start_button.place(relx=0.15, rely=0.80, relwidth=0.2, relheight=0.05)
 
     stop_button = ctk.CTkButton(root, text='Destroy', cursor='hand2', command=lambda: destroy())
