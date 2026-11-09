@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# run.sh - starts Changeling CopyCat. Sets it up first if it needs it (setup.sh).
+# run.sh - starts Changeling Simia. Sets it up first if it needs it (setup.sh).
 #   ./run.sh                                       opens the app
 #   ./run.sh -s face.png -t clip.mp4 -o out.mp4    swaps without the app
 # Uses your NVIDIA GPU when there is one; add --execution-provider cpu to force the CPU.

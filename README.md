@@ -26,15 +26,17 @@
   </div>
 <br>
 
-# Changeling CopyCat
+# Changeling Simia
 
-**Website:** https://cursedprograms.github.io/Changeling-CopyCat/
+**Website:** https://cursedprograms.github.io/Changeling-Simia/
+
+*Simia* is Latin for an ape, and the Romans' word for a copycat: Horace calls an imitating poet *simius iste*, "that ape". (It was Changeling CopyCat until 2026-11-09.)
 
 ![A target photo, the face to put on it, and Changeling's result](samples/changeling_sample.jpg)
 
 Put a face from one photo onto another photo or a whole video. *Part of the Changeling family, all together in [Changeling Studio](https://github.com/CursedPrograms/Changeling-Studio):
-**CopyCat** ·
-[CopyCat Realtime](https://github.com/CursedPrograms/Changeling-CopyCat-Realtime) ·
+**Simia** ·
+[Simia Realtime](https://github.com/CursedPrograms/Changeling-Simia-Realtime) ·
 [Tiresias](https://github.com/CursedPrograms/Changeling-Tiresias) (gender) ·
 [Chronos](https://github.com/CursedPrograms/Changeling-Chronos) (age) ·
 [Natio](https://github.com/CursedPrograms/Changeling-Natio) (where in the world) ·
@@ -50,7 +52,7 @@ Pick the face, pick the target, press
 **Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
 faces, making the video), how far it is and how long it has left. GFPGAN can clean the faces up after.
 
-Changeling CopyCat grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
+Changeling Simia grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
 under the **GNU AGPL-3.0** (see `LICENSE`). Its NSFW check stays on: explicit targets are refused.
 
 Use it on faces you have the right to use: AI-generated people, yourself, or people who agreed to it.
