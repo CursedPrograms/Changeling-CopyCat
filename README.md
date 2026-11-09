@@ -13,6 +13,8 @@
   <img alt="Python" src="https://img.shields.io/badge/python%20-%23323330.svg?&style=for-the-badge&logo=python&logoColor=white"/>
 </div>
 
+<p align="center"><img src="https://raw.githubusercontent.com/CursedPrograms/Changeling-Studio/main/site/logo.png" alt="Changeling" width="120"></p>
+
 <div align="center">
   <img alt="TensorFlow" src="https://img.shields.io/badge/tensorflow%20-%23323330.svg?&style=for-the-badge&logo=tensorflow&logoColor=white"/>
 </div>
@@ -30,7 +32,19 @@
 
 ![A target photo, the face to put on it, and Changeling's result](samples/changeling_sample.jpg)
 
-Put a face from one photo onto another photo or a whole video. *Part of the Changeling family: [Changeling CopyCat Realtime](https://github.com/CursedPrograms/Changeling-CopyCat-Realtime) does it live on the webcam.*
+Put a face from one photo onto another photo or a whole video. *Part of the Changeling family, all together in [Changeling Studio](https://github.com/CursedPrograms/Changeling-Studio):
+**CopyCat** ·
+[CopyCat Realtime](https://github.com/CursedPrograms/Changeling-CopyCat-Realtime) ·
+[Tiresias](https://github.com/CursedPrograms/Changeling-Tiresias) (gender) ·
+[Chronos](https://github.com/CursedPrograms/Changeling-Chronos) (age) ·
+[Natio](https://github.com/CursedPrograms/Changeling-Natio) (where in the world) ·
+[Cosmetics](https://github.com/CursedPrograms/Changeling-Cosmetics) (makeup, hair, beards) ·
+[Echo](https://github.com/CursedPrograms/Changeling-Echo) (voices) ·
+[Tonsor](https://github.com/CursedPrograms/Changeling-Tonsor) (hairstyles) ·
+realtime: [Tiresias](https://github.com/CursedPrograms/Changeling-Tiresias-Realtime) ·
+[Chronos](https://github.com/CursedPrograms/Changeling-Chronos-Realtime) ·
+[Natio](https://github.com/CursedPrograms/Changeling-Natio-Realtime) ·
+[Cosmetics](https://github.com/CursedPrograms/Changeling-Cosmetics-Realtime).*
 
 Pick the face, pick the target, press
 **Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
