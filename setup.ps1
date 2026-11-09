@@ -50,4 +50,4 @@ Invoke-Checked $VenvPy scripts/download_models.py
 # 4) Which GPU, and a warning if its driver is too old.
 & $VenvPy scripts/check_gpu.py
 
-Write-Host 'Changeling Simia is ready. Start it with run.ps1'
+Write-Host 'Changeling Imago is ready. Start it with run.ps1'

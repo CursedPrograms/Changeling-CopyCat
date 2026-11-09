@@ -44,7 +44,7 @@ rem 3) Any missing models.
 rem 4) Which GPU, and a warning if its driver is too old.
 "%VENV_PY%" scripts/check_gpu.py
 
-echo Changeling Simia is ready. Start it with run.bat
+echo Changeling Imago is ready. Start it with run.bat
 exit /b 0
 
 :error

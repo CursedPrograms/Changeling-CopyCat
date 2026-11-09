@@ -1,2 +1,2 @@
-name = 'Changeling Simia'
+name = 'Changeling Imago'
 version = '1.0.0'

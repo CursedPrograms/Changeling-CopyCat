@@ -39,7 +39,7 @@ progress_bar = None
 busy_buttons = []
 JOB = None
 KOFI = 'https://ko-fi.com/cursedentertainment'
-GITHUB = 'https://github.com/CursedPrograms/Changeling-Simia'
+GITHUB = 'https://github.com/CursedPrograms/Changeling-Imago'
 
 
 # todo: remove by native support -> https://github.com/TomSchimansky/CustomTkinter/issues/934
