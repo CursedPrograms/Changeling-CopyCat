@@ -50,7 +50,7 @@ realtime: [Tiresias](https://github.com/CursedPrograms/Changeling-Tiresias-Realt
 
 Pick the face, pick the target, press
 **Start**, and a completion bar shows what it's doing (loading, checking, extracting frames, swapping
-faces, making the video), how far it is and how long it has left. GFPGAN can clean the faces up after.
+faces, making the video), how far it is and how long it has left. **Sharper face** (on by default) runs GFPGAN after the swap: the swap model draws the new face at 128 x 128, so on its own the face looks soft and blocky next to the rest of the picture; GFPGAN redraws it sharp. Switch it off for quicker tests, most of all on videos.
 
 Changeling Imago grew out of [roop](https://github.com/s0md3v/roop) by s0md3v, and like roop it's free software
 under the **GNU AGPL-3.0** (see `LICENSE`). Its NSFW check stays on: explicit targets are refused.
@@ -88,7 +88,7 @@ Give a source face, a target and an output, and it swaps without opening the win
 
 ```
 run.bat -s face.png -t clip.mp4 -o out.mp4
-run.bat -s face.png -t clip.mp4 -o out.mp4 --frame-processor face_swapper face_enhancer --keep-fps
+run.bat -s face.png -t clip.mp4 -o out.mp4 --keep-fps
 ```
 
 The swap refuses explicit targets: the NSFW check (`changeling/predictor.py`) stays on.

@@ -35,7 +35,8 @@ def parse_args() -> None:
     program.add_argument('-s', '--source', help='select an source image', dest='source_path')
     program.add_argument('-t', '--target', help='select an target image or video', dest='target_path')
     program.add_argument('-o', '--output', help='select output file or directory', dest='output_path')
-    program.add_argument('--frame-processor', help='frame processors (choices: face_swapper, face_enhancer, ...)', dest='frame_processor', default=['face_swapper'], nargs='+')
+    program.add_argument('--frame-processor', help="frame processors (choices: face_swapper, face_enhancer, ...); the default swaps and then sharpens the face (GFPGAN), like the window's Sharper face switch", dest='frame_processor', default=['face_swapper', 'face_enhancer'], nargs='+')
+    program.add_argument('--face-enhancer-model', help='the Sharper face model: GFPGAN (smooth, clean), CodeFormer (the most faithful) or GPEN (the most detail)', dest='face_enhancer_model', default='GFPGAN', choices=['GFPGAN', 'CodeFormer', 'GPEN'])
     program.add_argument('--keep-fps', help='keep target fps', dest='keep_fps', action='store_true')
     program.add_argument('--keep-frames', help='keep temporary frames', dest='keep_frames', action='store_true')
     program.add_argument('--skip-audio', help='skip target audio', dest='skip_audio', action='store_true')
@@ -63,6 +64,7 @@ def parse_args() -> None:
     changeling.globals.keep_frames = args.keep_frames
     changeling.globals.skip_audio = args.skip_audio
     changeling.globals.many_faces = args.many_faces
+    changeling.globals.face_enhancer_model = args.face_enhancer_model
     changeling.globals.reference_face_position = args.reference_face_position
     changeling.globals.reference_frame_number = args.reference_frame_number
     changeling.globals.similar_face_distance = args.similar_face_distance
@@ -143,6 +145,12 @@ def start() -> None:
     except Exception as error:  # the window says what went wrong instead of the job vanishing
         ok, message = False, f'Failed: {error}'
         print(f'[CHANGELING.CORE] {message}')
+    if ok and changeling.globals.output_path and os.path.exists(changeling.globals.output_path):
+        try:
+            from gallery import remember            # the Changeling gallery (gallery.py, next to run.py)
+            remember(changeling.globals.output_path, 'Imago')
+        except ImportError:
+            pass
     progress.finish(message, ok)
 
 
@@ -238,7 +246,8 @@ def run() -> None:
     parse_args()
     if not pre_check():
         return
-    for frame_processor in get_frame_processors_modules(changeling.globals.frame_processors):
+    # every processor the window can switch on gets its models now, not just the ones picked
+    for frame_processor in get_frame_processors_modules(sorted(set(changeling.globals.frame_processors) | {'face_swapper', 'face_enhancer'})):
         if not frame_processor.pre_check():
             return
     limit_resources()

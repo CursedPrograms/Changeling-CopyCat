@@ -37,12 +37,13 @@ def load_frame_processor_module(frame_processor: str) -> Any:
 
 
 def get_frame_processors_modules(frame_processors: List[str]) -> List[ModuleType]:
+    """The modules for frame_processors, in order. Rebuilt when the list changes (the window's
+    "Sharper face" switch adds and removes the enhancer between jobs)."""
     global FRAME_PROCESSORS_MODULES
 
-    if not FRAME_PROCESSORS_MODULES:
-        for frame_processor in frame_processors:
-            frame_processor_module = load_frame_processor_module(frame_processor)
-            FRAME_PROCESSORS_MODULES.append(frame_processor_module)
+    names = [module.__name__.rsplit('.', 1)[-1] for module in FRAME_PROCESSORS_MODULES]
+    if names != list(frame_processors):
+        FRAME_PROCESSORS_MODULES = [load_frame_processor_module(name) for name in frame_processors]
     return FRAME_PROCESSORS_MODULES
 
 

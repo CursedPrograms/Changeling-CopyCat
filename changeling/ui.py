@@ -111,23 +111,35 @@ def create_root(start: Callable[[], None], destroy: Callable[[], None]) -> ctk.C
     many_faces_switch = ctk.CTkSwitch(root, text='Many faces', variable=many_faces_value, cursor='hand2', command=lambda: setattr(changeling.globals, 'many_faces', many_faces_value.get()))
     many_faces_switch.place(relx=0.6, rely=0.65)
 
+    # inswapper draws the new face at 128 x 128, so on its own the face is soft and blocky next to the rest of the
+    # picture; GFPGAN redraws it sharp afterwards (slower, most of all on videos)
+    sharp_value = ctk.BooleanVar(value='face_enhancer' in changeling.globals.frame_processors)
+    sharp_switch = ctk.CTkSwitch(root, text='Sharper face (GFPGAN: higher quality, slower)', variable=sharp_value, cursor='hand2', command=lambda: set_sharper(sharp_value.get()))
+    sharp_switch.place(relx=0.1, rely=0.7)
+    sharp_model = ctk.CTkSegmentedButton(root, values=['GFPGAN', 'CodeFormer', 'GPEN'], command=lambda v: setattr(changeling.globals, 'face_enhancer_model', v))
+    sharp_model.set(changeling.globals.face_enhancer_model)
+    sharp_model.place(relx=0.1, rely=0.745, relwidth=0.42)
+
     start_button = ctk.CTkButton(root, text='Start', cursor='hand2', command=lambda: select_output_path(start))
-    start_button.place(relx=0.15, rely=0.75, relwidth=0.2, relheight=0.05)
+    start_button.place(relx=0.15, rely=0.795, relwidth=0.2, relheight=0.045)
 
     stop_button = ctk.CTkButton(root, text='Quit', cursor='hand2', command=lambda: destroy())
-    stop_button.place(relx=0.4, rely=0.75, relwidth=0.2, relheight=0.05)
+    stop_button.place(relx=0.4, rely=0.795, relwidth=0.2, relheight=0.045)
 
     preview_button = ctk.CTkButton(root, text='Preview', cursor='hand2', command=lambda: toggle_preview())
-    preview_button.place(relx=0.65, rely=0.75, relwidth=0.2, relheight=0.05)
+    preview_button.place(relx=0.65, rely=0.795, relwidth=0.2, relheight=0.045)
     busy_buttons = [start_button, preview_button, source_button, target_button]
+
+    gallery_button = ctk.CTkButton(root, text='Gallery', cursor='hand2', command=lambda: open_gallery(root))
+    gallery_button.place(relx=0.6, rely=0.745, relwidth=0.3, relheight=0.04)
 
     # the completion bar: what stage the job's at, how far, and how long it has left
     progress_bar = ctk.CTkProgressBar(root, mode='determinate')
     progress_bar.set(0)
-    progress_bar.place(relx=0.1, rely=0.84, relwidth=0.8, relheight=0.02)
+    progress_bar.place(relx=0.1, rely=0.86, relwidth=0.8, relheight=0.02)
 
     status_label = ctk.CTkLabel(root, text='Pick a face and a target, then Start.', justify='center')
-    status_label.place(relx=0.1, rely=0.875, relwidth=0.8)
+    status_label.place(relx=0.1, rely=0.89, relwidth=0.8)
 
     link_color = ctk.ThemeManager.theme.get('Link').get('text_color')
     made_by = ctk.CTkLabel(root, text='Cursed Entertainment  ·  GitHub  ·  Ko-fi', justify='center', cursor='hand2', text_color=link_color)
@@ -157,6 +169,18 @@ def create_preview(parent: ctk.CTkToplevel) -> ctk.CTkToplevel:
     preview.bind('<Up>', lambda event: update_face_reference(1))
     preview.bind('<Down>', lambda event: update_face_reference(-1))
     return preview
+
+
+def open_gallery(root) -> None:
+    """Everything made with the Changelings (Start still asks where to save; the gallery lists it too)."""
+    from gallery import show
+    show(root, 'Imago')
+
+
+def set_sharper(on: bool) -> None:
+    """The face enhancer after the swap (on), or the swap alone (off)."""
+    processors = [name for name in changeling.globals.frame_processors if name != 'face_enhancer']
+    changeling.globals.frame_processors = processors + ['face_enhancer'] if on else processors
 
 
 def update_status(text: str) -> None:

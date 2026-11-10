@@ -2,6 +2,7 @@ import os
 from typing import Any, List, Callable
 import sys
 import cv2
+import numpy
 import threading
 
 # basicsr (a gfpgan dependency) imports torchvision.transforms.functional_tensor,
@@ -22,6 +23,11 @@ from changeling.typing import Frame, Face
 from changeling.utilities import conditional_download, models_directory, is_image, is_video
 
 FACE_ENHANCER = None
+# CodeFormer and GPEN (FaceFusion's ONNX copies), looked for in models/ and then F:\AIModels\faceswap
+ONNX_ENHANCERS = {'CodeFormer': 'codeformer.onnx', 'GPEN': 'gpen_bfr_512.onnx'}
+ONNX_SESSIONS = {}
+FFHQ_512 = numpy.float32([[0.37691676, 0.46864664], [0.62285697, 0.46912813], [0.50123859, 0.61331904],
+                          [0.39308822, 0.72541100], [0.61150205, 0.72490465]]) * 512
 THREAD_SEMAPHORE = threading.Semaphore()
 THREAD_LOCK = threading.Lock()
 NAME = 'CHANGELING.FACE-ENHANCER'
@@ -69,7 +75,49 @@ def post_process() -> None:
     clear_face_enhancer()
 
 
+def onnx_path(model: str) -> Any:
+    file = ONNX_ENHANCERS.get(model)
+    if not file:
+        return None
+    for folder in (models_directory(), r'F:\AIModels\faceswap'):
+        if os.path.exists(os.path.join(folder, file)):
+            return os.path.join(folder, file)
+    return None
+
+
+def onnx_session(path: str) -> Any:
+    with THREAD_LOCK:
+        if path not in ONNX_SESSIONS:
+            import onnxruntime
+            ONNX_SESSIONS[path] = onnxruntime.InferenceSession(path, providers=changeling.globals.execution_providers)
+    return ONNX_SESSIONS[path]
+
+
+def enhance_face_onnx(target_face: Face, temp_frame: Frame, session: Any) -> Frame:
+    """CodeFormer or GPEN: the face aligned to 512 x 512 (FFHQ's way), redrawn, and put back with a soft oval."""
+    a, _ = cv2.estimateAffinePartial2D(target_face['kps'].astype(numpy.float32), FFHQ_512, method=cv2.LMEDS)
+    if a is None:
+        return temp_frame
+    crop = cv2.warpAffine(temp_frame, a, (512, 512), borderMode=cv2.BORDER_REPLICATE)
+    x = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB).astype(numpy.float32).transpose(2, 0, 1)[None] / 127.5 - 1
+    feeds = {i.name: (numpy.array(1.0, numpy.float64) if i.name == 'weight' else x) for i in session.get_inputs()}
+    with THREAD_SEMAPHORE:
+        y = session.run(None, feeds)[0][0]
+    sharp = cv2.cvtColor(((numpy.clip(y, -1, 1) + 1) * 127.5).transpose(1, 2, 0).astype(numpy.uint8), cv2.COLOR_RGB2BGR)
+    mask = numpy.zeros((512, 512), numpy.float32)
+    cv2.ellipse(mask, (256, 280), (180, 225), 0, 0, 360, 1.0, -1)
+    mask = cv2.GaussianBlur(mask, (0, 0), 16)
+    h, w = temp_frame.shape[:2]
+    back = cv2.invertAffineTransform(a)
+    face = cv2.warpAffine(sharp, back, (w, h), borderValue=0.0).astype(numpy.float32)
+    alpha = cv2.warpAffine(mask, back, (w, h), borderValue=0.0)[..., None]
+    return (face * alpha + temp_frame.astype(numpy.float32) * (1 - alpha)).astype(numpy.uint8)
+
+
 def enhance_face(target_face: Face, temp_frame: Frame) -> Frame:
+    path = onnx_path(changeling.globals.face_enhancer_model)
+    if path:
+        return enhance_face_onnx(target_face, temp_frame, onnx_session(path))
     start_x, start_y, end_x, end_y = map(int, target_face['bbox'])
     padding_x = int((end_x - start_x) * 0.5)
     padding_y = int((end_y - start_y) * 0.5)
